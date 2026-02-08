@@ -37,6 +37,25 @@ export interface PlaybookSkill {
   path: string;
 }
 
+export interface GitHubIssue {
+  id: number;
+  number: number;
+  title: string;
+  state: "open" | "closed";
+  htmlUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  labels: {
+    id: number;
+    name: string;
+    color: string;
+  }[];
+  user: {
+    login: string;
+    avatarUrl: string;
+  };
+}
+
 export class GitHubService {
   private octokit: Octokit;
 
@@ -238,5 +257,42 @@ export class GitHubService {
     }
 
     return skills;
+  }
+
+  /**
+   * Get issues from a repository
+   */
+  async getIssues(owner: string, repo: string): Promise<GitHubIssue[]> {
+    try {
+      const { data } = await this.octokit.issues.listForRepo({
+        owner,
+        repo,
+        state: "all",
+        per_page: 100,
+        sort: "updated",
+      });
+
+      return data.map((issue) => ({
+        id: issue.id,
+        number: issue.number,
+        title: issue.title,
+        state: issue.state as "open" | "closed",
+        htmlUrl: issue.html_url,
+        createdAt: issue.created_at,
+        updatedAt: issue.updated_at,
+        labels: issue.labels.map((label) => 
+          typeof label === "string" 
+            ? { id: 0, name: label, color: "000000" }
+            : { id: label.id || 0, name: label.name || "", color: label.color || "000000" }
+        ),
+        user: {
+          login: issue.user?.login || "unknown",
+          avatarUrl: issue.user?.avatar_url || "",
+        },
+      }));
+    } catch (error) {
+      console.error("Error fetching issues:", error);
+      return [];
+    }
   }
 }

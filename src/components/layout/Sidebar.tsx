@@ -10,9 +10,6 @@ export default function Sidebar() {
         <Link href="/tasks" className="w-10 h-10 flex items-center justify-center rounded-lg text-[--color-text-muted] hover:bg-[--color-surface-raised] hover:text-[--color-text-secondary] transition-colors" title="Tasks">
           <span className="material-symbols-outlined">check_circle</span>
         </Link>
-        <Link href="/timeline" className="w-10 h-10 flex items-center justify-center rounded-lg text-[--color-text-muted] hover:bg-[--color-surface-raised] hover:text-[--color-text-secondary] transition-colors" title="Activity">
-          <span className="material-symbols-outlined">pulse_alert</span>
-        </Link>
       </nav>
     </aside>
   );
