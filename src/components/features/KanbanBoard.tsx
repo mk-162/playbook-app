@@ -25,10 +25,16 @@ export default function KanbanBoard() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  // Placeholder handler for now - can be enhanced later
+  const handleSaveTask = (task: any) => {
+    console.log('Task saved:', task);
+    closeModal();
+  };
+
   return (
     <AppLayout disableScroll>
       <div ref={containerRef} className="flex flex-col h-full overflow-hidden relative">
-        <TaskModal isOpen={isModalOpen} onClose={closeModal} />
+        <TaskModal isOpen={isModalOpen} onClose={closeModal} onSave={handleSaveTask} />
 
         {/* Sub-Header / Controls */}
         <div className="px-6 py-6 w-full shrink-0">

@@ -1,11 +1,60 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import AppLayout from "@/components/layout/AppLayout";
+import TaskModal from "./TaskModal";
+
+type TaskStatus = "todo" | "in-progress" | "review" | "done";
+type TaskPriority = "low" | "medium" | "high";
+type TaskAssignee = "human" | "agent";
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  assignee: string;
+  assigneeType: TaskAssignee;
+  status: TaskStatus;
+  priority: TaskPriority;
+}
 
 export default function Dashboard() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [filterType, setFilterType] = useState<"all" | "agent" | "human">("all");
+  
+  // Sample tasks with mix of agents and humans
+  const [tasks, setTasks] = useState<Task[]>([
+    {
+      id: "1",
+      title: "Update Brand Guidelines",
+      description: "Refresh brand documentation with new color palette and typography standards",
+      assignee: "Sudo",
+      assigneeType: "agent",
+      status: "in-progress",
+      priority: "high",
+    },
+    {
+      id: "2",
+      title: "Approve Newsletter Draft",
+      description: "Review and approve the monthly newsletter before publishing",
+      assignee: "Sarah Jenkins",
+      assigneeType: "human",
+      status: "review",
+      priority: "high",
+    },
+    {
+      id: "3",
+      title: "Refactor Onboarding Flow",
+      description: "Improve user onboarding experience with clearer steps and better visuals",
+      assignee: "Alex Chen",
+      assigneeType: "human",
+      status: "todo",
+      priority: "medium",
+    },
+  ]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -28,6 +77,66 @@ export default function Dashboard() {
     return () => ctx.revert();
   }, []);
 
+  const handleAddTask = (task: Omit<Task, "id">) => {
+    const newTask = {
+      ...task,
+      id: Date.now().toString(),
+    };
+    setTasks([...tasks, newTask]);
+    setIsModalOpen(false);
+  };
+
+  const handleEditTask = (updatedTask: Task) => {
+    setTasks(tasks.map(t => t.id === updatedTask.id ? updatedTask : t));
+    setIsModalOpen(false);
+    setSelectedTask(null);
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(tasks.filter(t => t.id !== taskId));
+    setIsModalOpen(false);
+    setSelectedTask(null);
+  };
+
+  const handleToggleComplete = (taskId: string) => {
+    setTasks(tasks.map(t => 
+      t.id === taskId 
+        ? { ...t, status: t.status === "done" ? "todo" : "done" as TaskStatus }
+        : t
+    ));
+  };
+
+  const openTaskModal = (task: Task) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+  };
+
+  const openNewTaskModal = () => {
+    setSelectedTask(null);
+    setIsModalOpen(true);
+  };
+
+  const filteredTasks = tasks.filter(task => {
+    if (filterType === "all") return true;
+    return task.assigneeType === filterType;
+  });
+
+  const getStatusBadge = (status: TaskStatus) => {
+    const styles = {
+      todo: "bg-slate-500/10 text-slate-500 border-slate-500/30",
+      "in-progress": "bg-primary/20 text-primary border-primary/30",
+      review: "bg-amber-500/20 text-amber-500 border-amber-500/30",
+      done: "bg-green-500/20 text-green-500 border-green-500/30",
+    };
+    const labels = {
+      todo: "TODO",
+      "in-progress": "IN PROGRESS",
+      review: "REVIEW",
+      done: "DONE",
+    };
+    return { style: styles[status], label: labels[status] };
+  };
+
   return (
     <AppLayout>
       <div ref={containerRef} className="flex flex-col min-h-full">
@@ -41,8 +150,12 @@ export default function Dashboard() {
             <button className="px-4 py-2 bg-[--color-surface] bg-[--color-card] text-sm font-medium rounded-lg border border-[--color-border] border-[--color-border] hover:bg-slate-200 hover:bg-[--color-surface-raised] transition-colors">
               Invite Agent
             </button>
-            <button className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/10">
-              New Document
+            <button 
+              onClick={openNewTaskModal}
+              className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/10 flex items-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[18px]">add</span>
+              Add Task
             </button>
           </div>
         </div>
@@ -130,58 +243,117 @@ export default function Dashboard() {
              {/* Right Column: Active Tasks (40%) */}
             <div className="col-span-12 lg:col-span-5 flex flex-col gap-6">
               <div>
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-[--color-text-secondary] mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-sm font-semibold uppercase tracking-wider text-[--color-text-secondary] flex items-center gap-2">
                     <span className="material-symbols-outlined text-[18px]">checklist</span>
                     Active Tasks
+                    <span className="text-[10px] bg-primary text-white px-2 py-0.5 rounded-full ml-2">
+                      {Math.round((tasks.filter(t => t.status === "done").length / tasks.length) * 100)}% Done
+                    </span>
+                  </h2>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setFilterType("all")}
+                      className={`px-3 py-1 text-xs font-medium rounded-lg border transition-colors ${
+                        filterType === "all"
+                          ? "bg-primary text-white border-primary"
+                          : "bg-[--color-surface] text-[--color-text-secondary] border-[--color-border] hover:bg-[--color-surface-raised]"
+                      }`}
+                    >
+                      All
+                    </button>
+                    <button
+                      onClick={() => setFilterType("agent")}
+                      className={`px-3 py-1 text-xs font-medium rounded-lg border transition-colors flex items-center gap-1 ${
+                        filterType === "agent"
+                          ? "bg-primary text-white border-primary"
+                          : "bg-[--color-surface] text-[--color-text-secondary] border-[--color-border] hover:bg-[--color-surface-raised]"
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-[14px]">smart_toy</span>
+                      Agents
+                    </button>
+                    <button
+                      onClick={() => setFilterType("human")}
+                      className={`px-3 py-1 text-xs font-medium rounded-lg border transition-colors flex items-center gap-1 ${
+                        filterType === "human"
+                          ? "bg-primary text-white border-primary"
+                          : "bg-[--color-surface] text-[--color-text-secondary] border-[--color-border] hover:bg-[--color-surface-raised]"
+                      }`}
+                    >
+                      <span className="material-symbols-outlined text-[14px]">person</span>
+                      Human
+                    </button>
                   </div>
-                  <span className="text-[10px] bg-primary text-white px-2 py-0.5 rounded-full">48% Done</span>
-                </h2>
+                </div>
                 <div className="dashboard-card bg-[--color-card] bg-[--color-card] border border-[--color-border] border-[--color-border] rounded-xl overflow-hidden">
-                  <div className="divide-y divide-[--color-border-muted] divide-[--color-border-muted]">
-                    {/* Task Item 1 */}
-                    <div className="p-4 flex items-center justify-between hover:bg-[--color-surface] hover:bg-[--color-surface] transition-colors cursor-pointer">
-                      <div className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded border-2 border-primary/40 flex items-center justify-center group">
-                          <div className="w-2 h-2 bg-primary rounded-sm opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        </div>
-                        <span className="text-sm font-medium">Update Brand Guidelines</span>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span className="px-2 py-1 text-[9px] rounded-full bg-primary/20 text-primary font-bold border border-primary/30">IN PROGRESS</span>
-                        <div className="w-6 h-6 rounded-full bg-cover bg-center border border-[--color-border] border-[--color-border]" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFCi2lwcuzbxIqPYPWwPX2dWDew6FcuYsxd9JKLu2bTJ8W_PUFfwEc0eLK82mBW3wSwJTFQ4LVLx3Q8EBSMgOV_3UtU_lSf9iraPxE144lDUdVrPPATUiHXFphj2EYey6gEt-2jA-eTHcQ4kpmsEieg7mMX8w3NIJY9YHjdZiFMoIiLnVVMavQnGV2im9MmZWPZjaF3uIcWbD1DyKwkL02inpbrdZwE4pM-rcF1ZJJZeVolvHl22Bc2WyTsMlhV9m9Zd0ZdWo8NYo')"}}></div>
-                      </div>
+                  {filteredTasks.length === 0 ? (
+                    <div className="p-8 text-center text-[--color-text-muted]">
+                      <span className="material-symbols-outlined text-4xl mb-2">task_alt</span>
+                      <p className="text-sm">No tasks found</p>
                     </div>
-                     {/* Task Item 2 */}
-                    <div className="p-4 flex items-center justify-between hover:bg-[--color-surface] hover:bg-[--color-surface] transition-colors cursor-pointer">
-                      <div className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded border-2 border-amber-500/40 flex items-center justify-center">
-                          <span className="material-symbols-outlined text-[14px] text-amber-500">priority_high</span>
-                        </div>
-                        <span className="text-sm font-medium text-[--color-text-primary]">Approve Newsletter Draft</span>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span className="px-2 py-1 text-[9px] rounded-full bg-amber-500/20 text-amber-500 font-bold border border-amber-500/30">REVIEW</span>
-                        <div className="w-6 h-6 rounded-full bg-cover bg-center border border-[--color-border] border-[--color-border]" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4Aqgazs5a9KqFRY0iTEBdd3zr7fgjBMoGISJfFsCHebhmiXfwova1W1QWjEeyZwt6pvvjsCQ27KiotpjiiakVyjncOp589A6jAo5hQ10WbaAeDa01FoFAJ8MFxAUvDfVeNoMxV6IT6SOunZmMuaz1P1WkxElhaWN9Qp_LsxbPoyDi3FUAmKktFKDf_8undiNjc6lSOj3b9mZXCDKFfey6VBa7eI6D4vg7ZchCxKtBG0WkUTrrShPosfydJaFYOiagegw7-g95Nt4')"}}></div>
-                      </div>
+                  ) : (
+                    <div className="divide-y divide-[--color-border-muted] divide-[--color-border-muted]">
+                      {filteredTasks.map((task) => {
+                        const badge = getStatusBadge(task.status);
+                        return (
+                          <div
+                            key={task.id}
+                            onClick={() => openTaskModal(task)}
+                            className="p-4 flex items-center justify-between hover:bg-[--color-surface] hover:bg-[--color-surface] transition-colors cursor-pointer"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleToggleComplete(task.id);
+                                }}
+                                className={`w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all ${
+                                  task.status === "done"
+                                    ? "border-green-500 bg-green-500"
+                                    : task.priority === "high"
+                                    ? "border-amber-500/40"
+                                    : "border-primary/40"
+                                }`}
+                              >
+                                {task.status === "done" ? (
+                                  <span className="material-symbols-outlined text-[14px] text-white">check</span>
+                                ) : task.priority === "high" ? (
+                                  <span className="material-symbols-outlined text-[14px] text-amber-500">priority_high</span>
+                                ) : null}
+                              </div>
+                              <span className={`text-sm font-medium ${task.status === "done" ? "line-through text-[--color-text-muted]" : ""}`}>
+                                {task.title}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <span className={`px-2 py-1 text-[9px] rounded-full font-bold border ${badge.style}`}>
+                                {badge.label}
+                              </span>
+                              <div className="flex items-center gap-2">
+                                {task.assigneeType === "agent" ? (
+                                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-[14px] text-white">smart_toy</span>
+                                  </div>
+                                ) : (
+                                  <div className="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-[14px] text-white">person</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                     {/* Task Item 3 */}
-                    <div className="p-4 flex items-center justify-between hover:bg-[--color-surface] hover:bg-[--color-surface] transition-colors cursor-pointer">
-                      <div className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded border-2 border-[--color-border] border-[--color-border] flex items-center justify-center"></div>
-                        <span className="text-sm font-medium">Refactor Onboarding Flow</span>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span className="px-2 py-1 text-[9px] rounded-full bg-[--color-surface] bg-[--color-surface] text-[--color-text-muted] font-bold border border-[--color-border] border-[--color-border]">TODO</span>
-                        <div className="flex -space-x-2">
-                          <div className="w-6 h-6 rounded-full border border-[--color-border] border-[--color-border] bg-cover" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUWi43k8Gkv6flpX8nRUr70uT1vJJciqDGbbclMsyib0UP9v3Yp2ZQd3vZ36Vvk70WbPsVoAA9I8DwDLbeEeESZMquF6u98-8g7pD-OBmEZHbmYRwQFTLD0sp4T2SHSc66CWi5Y7PiEJP_RETHMuASfxrKS3-zGcdFdXLHcX1yNGljJEeZsYl0YW2HqikzS0yMhRh1hK-o0WhNN5WL724GkbrA5ocsnVVMslGrZC-zl14IhgJFpxyEWtovTIUiUxHaw5ZeDum8_yo')"}}></div>
-                          <div className="w-6 h-6 rounded-full border border-[--color-border] border-[--color-border] bg-cover" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAekkB42CD0OxOalUd1_7h5UPBXZIfEqyb_UgppXdHJcWWDa1hK_fWa8oWE5KibNp1XoXrROKfRRSKjr_YcmiqxLr41VsRcBryEIL1eCizAVN6h8qz0Wjf0mZSHPc0D7zcm5-b2u0wbokcYb6hT6DtZhmGd3JNQFlrs2FBTWwlAkgCuNAZ6MUPGdfBxa3FHwRRulGYGewbxeeixdOnfpcN2JwVNjoCKf3SZfxVwmM1XzL3g-q6flxtadJC2AJg2EMDkGSDzhCpgxko')"}}></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                   <div className="bg-[--color-surface] bg-[--color-surface]/30 p-3 text-center">
-                    <button className="text-[11px] font-bold text-[--color-text-muted] hover:text-[--color-text-primary] uppercase tracking-widest">View All Tasks</button>
+                  )}
+                  <div className="bg-[--color-surface] bg-[--color-surface]/30 p-3 text-center">
+                    <button 
+                      onClick={openNewTaskModal}
+                      className="text-[11px] font-bold text-[--color-text-muted] hover:text-primary uppercase tracking-widest transition-colors"
+                    >
+                      + Add New Task
+                    </button>
                   </div>
                 </div>
               </div>
@@ -239,6 +411,18 @@ export default function Dashboard() {
           </div>
         </footer>
       </div>
+
+      {/* Task Modal */}
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedTask(null);
+        }}
+        task={selectedTask}
+        onSave={selectedTask ? handleEditTask : handleAddTask}
+        onDelete={handleDeleteTask}
+      />
     </AppLayout>
   );
 }

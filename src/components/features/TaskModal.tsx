@@ -1,14 +1,62 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import gsap from "gsap";
+
+type TaskStatus = "todo" | "in-progress" | "review" | "done";
+type TaskPriority = "low" | "medium" | "high";
+type TaskAssignee = "human" | "agent";
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  assignee: string;
+  assigneeType: TaskAssignee;
+  status: TaskStatus;
+  priority: TaskPriority;
+}
 
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
+  task?: Task | null;
+  onSave: (task: any) => void;
+  onDelete?: (taskId: string) => void;
 }
 
-export default function TaskModal({ isOpen, onClose }: TaskModalProps) {
+export default function TaskModal({ isOpen, onClose, task, onSave, onDelete }: TaskModalProps) {
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    assignee: "",
+    assigneeType: "human" as TaskAssignee,
+    status: "todo" as TaskStatus,
+    priority: "medium" as TaskPriority,
+  });
+
+  useEffect(() => {
+    if (task) {
+      setFormData({
+        title: task.title,
+        description: task.description,
+        assignee: task.assignee,
+        assigneeType: task.assigneeType,
+        status: task.status,
+        priority: task.priority,
+      });
+    } else {
+      setFormData({
+        title: "",
+        description: "",
+        assignee: "",
+        assigneeType: "human",
+        status: "todo",
+        priority: "medium",
+      });
+    }
+  }, [task, isOpen]);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -21,197 +69,217 @@ export default function TaskModal({ isOpen, onClose }: TaskModalProps) {
     };
   }, [isOpen]);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.title.trim() || !formData.assignee.trim()) {
+      alert("Please fill in title and assignee");
+      return;
+    }
+    
+    if (task) {
+      onSave({ ...formData, id: task.id });
+    } else {
+      onSave(formData);
+    }
+  };
+
+  const handleDelete = () => {
+    if (task && onDelete && confirm("Are you sure you want to delete this task?")) {
+      onDelete(task.id);
+    }
+  };
+
   if (!isOpen) return null;
+
+  const statusOptions: { value: TaskStatus; label: string; color: string }[] = [
+    { value: "todo", label: "To Do", color: "text-slate-500" },
+    { value: "in-progress", label: "In Progress", color: "text-primary" },
+    { value: "review", label: "Review", color: "text-amber-500" },
+    { value: "done", label: "Done", color: "text-green-500" },
+  ];
+
+  const priorityOptions: { value: TaskPriority; label: string; color: string }[] = [
+    { value: "low", label: "Low", color: "text-slate-500" },
+    { value: "medium", label: "Medium", color: "text-blue-500" },
+    { value: "high", label: "High", color: "text-rose-500" },
+  ];
+
+  const assigneeOptions = [
+    { name: "Sarah Jenkins", type: "human" as TaskAssignee },
+    { name: "Alex Chen", type: "human" as TaskAssignee },
+    { name: "MK", type: "human" as TaskAssignee },
+    { name: "Sudo", type: "agent" as TaskAssignee },
+    { name: "Alpha", type: "agent" as TaskAssignee },
+    { name: "Sigma", type: "agent" as TaskAssignee },
+  ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose}></div>
-      <div className="modal-content relative w-full max-w-5xl bg-[--color-card] dark:bg-card-dark rounded-xl shadow-2xl border border-[--color-border] border-[--color-border] flex flex-col max-h-[90vh] overflow-hidden">
+      <div className="modal-content relative w-full max-w-3xl bg-[--color-card] dark:bg-card-dark rounded-xl shadow-2xl border border-[--color-border] border-[--color-border] flex flex-col max-h-[90vh] overflow-hidden">
         {/* Header */}
         <header className="flex items-center justify-between px-6 py-4 border-b border-[--color-border] border-[--color-border] shrink-0">
-          <div className="flex items-center gap-4">
-            <span className="material-symbols-outlined text-primary">task_alt</span>
-            <h1 className="text-xl font-bold tracking-tight">Reskin the Website</h1>
-            <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-lg text-sm font-semibold">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-              In Progress
-              <span className="material-symbols-outlined text-[16px] ml-1">expand_more</span>
-            </div>
-          </div>
           <div className="flex items-center gap-3">
-            <button className="p-2 hover:bg-[--color-surface] dark:hover:bg-slate-800 rounded-lg transition-colors">
-              <span className="material-symbols-outlined">more_horiz</span>
-            </button>
-            <button onClick={onClose} className="p-2 hover:bg-[--color-surface] dark:hover:bg-slate-800 rounded-lg transition-colors">
-              <span className="material-symbols-outlined">close</span>
-            </button>
+            <span className="material-symbols-outlined text-primary">task_alt</span>
+            <h1 className="text-xl font-bold tracking-tight">
+              {task ? "Edit Task" : "Create New Task"}
+            </h1>
           </div>
+          <button onClick={onClose} className="p-2 hover:bg-[--color-surface] dark:hover:bg-slate-800 rounded-lg transition-colors">
+            <span className="material-symbols-outlined">close</span>
+          </button>
         </header>
 
-        <div className="flex flex-1 overflow-hidden">
-          {/* Left Column: Description & Activity */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
-            {/* Description */}
-            <section className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xs font-bold uppercase tracking-wider text-[--color-text-muted] dark:text-[--color-text-secondary]">Description</h2>
-                <button className="text-xs text-primary font-medium hover:underline">Edit</button>
-              </div>
-              <div className="prose dark:prose-invert max-w-none text-slate-700 dark:text-[--color-text-primary]">
-                <p>This task involves updating the primary design system to reflect the new brand guidelines. Key areas include the landing page, dashboard, and settings components.</p>
-                <ul className="list-disc pl-5 space-y-1 mt-2">
-                  <li>Update color variables in <code className="bg-[--color-surface] dark:bg-slate-800 px-1 rounded text-primary">tailwind.config.js</code></li>
-                  <li>Replace legacy logos with SVG assets</li>
-                  <li>Refactor button component variants</li>
-                </ul>
-              </div>
-            </section>
-            <hr className="border-[--color-border] border-[--color-border]" />
-
-            {/* Activity Feed */}
-            <section className="space-y-6">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-[--color-text-muted] dark:text-[--color-text-secondary]">Activity History</h2>
-              <div className="relative space-y-6 before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-200 dark:before:bg-border-dark">
-                {/* Activity Item 1 */}
-                <div className="relative flex gap-4">
-                  <div className="z-10 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white shadow-[0_0_10px_rgba(43,108,238,0.15)]">
-                    <span className="material-symbols-outlined">smart_toy</span>
-                  </div>
-                  <div className="flex-1 pt-1">
-                    <p className="text-sm">
-                      <span className="font-bold">Sudo</span>
-                      <span className="text-[--color-text-muted] dark:text-[--color-text-secondary] mx-1">created this task via</span>
-                      <span className="px-1.5 py-0.5 bg-[--color-surface] dark:bg-slate-800 rounded border border-[--color-border] border-[--color-border] text-[11px] font-mono">MCP Protocol</span>
-                    </p>
-                    <p className="text-xs text-[--color-text-muted] mt-1">2 hours ago</p>
-                  </div>
-                </div>
-                {/* Activity Item 2 */}
-                <div className="relative flex gap-4">
-                  <div className="z-10 flex items-center justify-center w-10 h-10 rounded-full bg-orange-500 text-white overflow-hidden">
-                     {/* Placeholder Avatar */}
-                     <span className="material-symbols-outlined text-white">person</span>
-                  </div>
-                  <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 rounded-lg p-4 border border-[--color-border] border-[--color-border]">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-bold">MK</span>
-                      <span className="text-xs text-[--color-text-muted]">1 hour ago</span>
-                    </div>
-                    <p className="text-sm text-slate-700 dark:text-[--color-text-primary]">
-                      I&apos;ve uploaded the new brand assets. @sudo, can you please start updating the configuration files?
-                    </p>
-                  </div>
-                </div>
-                {/* Activity Item 3 */}
-                <div className="relative flex gap-4">
-                  <div className="z-10 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white shadow-[0_0_10px_rgba(43,108,238,0.15)]">
-                    <span className="material-symbols-outlined">smart_toy</span>
-                  </div>
-                  <div className="flex-1 pt-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold">Sudo</span>
-                      <span className="text-[10px] bg-primary/20 text-primary px-1.5 rounded-full font-bold uppercase tracking-tighter">Agent</span>
-                    </div>
-                    <p className="text-sm text-slate-700 dark:text-[--color-text-primary] mt-1">
-                      Updated <code className="text-primary">tailwind.config.js</code> with 12 new hex codes.
-                    </p>
-                    <div className="mt-3 bg-black rounded p-3 font-mono text-xs text-green-400 border border-slate-700">
-                      <div className="flex gap-2">
-                        <span className="text-[--color-text-muted]">$</span>
-                        <span>git commit -m &quot;feat: sync brand colors via MCP&quot;</span>
-                      </div>
-                      <div className="text-[--color-text-secondary] mt-1">[main 4f2a1e] 1 file changed, 24 insertions(+)</div>
-                    </div>
-                    <p className="text-xs text-[--color-text-muted] mt-2">45 minutes ago</p>
-                  </div>
-                </div>
-              </div>
-            </section>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+          {/* Title */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-[--color-text-primary]">
+              Task Title <span className="text-rose-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              placeholder="Enter task title..."
+              className="w-full px-4 py-3 bg-[--color-surface] border border-[--color-border] rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+              required
+            />
           </div>
 
-          {/* Right Sidebar: Metadata */}
-          <aside className="w-72 border-l border-[--color-border] border-[--color-border] p-6 space-y-6 bg-slate-50/50 dark:bg-black/20 shrink-0 hidden md:block overflow-y-auto custom-scrollbar">
-             <div className="space-y-4">
-               {/* Assignee */}
-               <div className="space-y-2">
-                 <label className="text-[11px] font-bold uppercase tracking-wider text-[--color-text-muted] dark:text-[--color-text-secondary]">Assignee</label>
-                 <div className="flex items-center gap-2 group cursor-pointer">
-                   <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center overflow-hidden">
-                     <span className="material-symbols-outlined text-[14px] text-white">smart_toy</span>
-                   </div>
-                   <span className="text-sm font-medium">Sudo (Agent)</span>
-                 </div>
-               </div>
-               {/* Status */}
-               <div className="space-y-2">
-                 <label className="text-[11px] font-bold uppercase tracking-wider text-[--color-text-muted] dark:text-[--color-text-secondary]">Priority</label>
-                 <div className="flex items-center gap-2 text-rose-500 group cursor-pointer">
-                   <span className="material-symbols-outlined text-[18px]">priority_high</span>
-                   <span className="text-sm font-medium">High</span>
-                 </div>
-               </div>
-               {/* Created By */}
-               <div className="space-y-2">
-                 <label className="text-[11px] font-bold uppercase tracking-wider text-[--color-text-muted] dark:text-[--color-text-secondary]">Created By</label>
-                 <div className="flex items-center gap-2">
-                   <span className="text-sm text-slate-700 dark:text-[--color-text-primary]">via MCP - Sudo</span>
-                 </div>
-               </div>
-               {/* Due Date */}
-               <div className="space-y-2">
-                 <label className="text-[11px] font-bold uppercase tracking-wider text-[--color-text-muted] dark:text-[--color-text-secondary]">Due Date</label>
-                 <div className="flex items-center gap-2 text-slate-700 dark:text-[--color-text-primary]">
-                   <span className="material-symbols-outlined text-[18px]">calendar_today</span>
-                   <span className="text-sm">Oct 24, 2023</span>
-                 </div>
-               </div>
-               {/* Labels */}
-               <div className="space-y-2">
-                 <label className="text-[11px] font-bold uppercase tracking-wider text-[--color-text-muted] dark:text-[--color-text-secondary]">Labels</label>
-                 <div className="flex flex-wrap gap-2">
-                   <span className="px-2 py-0.5 rounded-full border border-primary/40 text-primary text-[11px] font-bold">Design</span>
-                   <span className="px-2 py-0.5 rounded-full border border-purple-500/40 text-purple-500 text-[11px] font-bold">Brand</span>
-                   <button className="w-6 h-6 flex items-center justify-center rounded-full border border-dashed border-slate-400 dark:border-slate-600 text-[--color-text-secondary]">
-                     <span className="material-symbols-outlined text-[14px]">add</span>
-                   </button>
-                 </div>
-               </div>
-             </div>
-             <div className="pt-6 border-t border-[--color-border] border-[--color-border]">
-               <button className="w-full flex items-center justify-between text-xs text-[--color-text-muted] hover:text-primary transition-colors">
-                 <span>Subscribe to updates</span>
-                 <span className="material-symbols-outlined text-[16px]">notifications</span>
-               </button>
-             </div>
-          </aside>
-        </div>
+          {/* Description */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-[--color-text-primary]">
+              Description
+            </label>
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="Describe the task..."
+              rows={4}
+              className="w-full px-4 py-3 bg-[--color-surface] border border-[--color-border] rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none resize-none transition-all"
+            />
+          </div>
 
-        {/* Footer Comment Box */}
-        <footer className="p-4 border-t border-[--color-border] border-[--color-border] bg-[--color-card] dark:bg-card-dark shrink-0">
-          <div className="flex flex-col gap-3">
-            <div className="relative">
-              <textarea className="w-full min-h-[80px] bg-slate-50 bg-[--color-surface] border border-[--color-border] border-[--color-border] rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none resize-none" placeholder="Leave a comment or prompt Sudo..."></textarea>
-              <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                <button className="p-1 text-[--color-text-secondary] hover:text-slate-600 dark:hover:text-slate-200">
-                  <span className="material-symbols-outlined text-[18px]">sentiment_satisfied</span>
-                </button>
-                <button className="p-1 text-[--color-text-secondary] hover:text-slate-600 dark:hover:text-slate-200">
-                  <span className="material-symbols-outlined text-[18px]">attach_file</span>
-                </button>
-              </div>
-              <div className="absolute bottom-3 right-3 text-[10px] text-[--color-text-secondary] uppercase font-bold flex items-center gap-1">
-                <span className="material-symbols-outlined text-[12px]">markdown</span>
-                Markdown supported
+          {/* Two Column Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Assignee */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-[--color-text-primary]">
+                Assignee <span className="text-rose-500">*</span>
+              </label>
+              <select
+                value={formData.assignee}
+                onChange={(e) => {
+                  const selected = assigneeOptions.find(a => a.name === e.target.value);
+                  setFormData({
+                    ...formData,
+                    assignee: e.target.value,
+                    assigneeType: selected?.type || "human",
+                  });
+                }}
+                className="w-full px-4 py-3 bg-[--color-surface] border border-[--color-border] rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+                required
+              >
+                <option value="">Select assignee...</option>
+                <optgroup label="Humans">
+                  {assigneeOptions.filter(a => a.type === "human").map(a => (
+                    <option key={a.name} value={a.name}>{a.name}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Agents">
+                  {assigneeOptions.filter(a => a.type === "agent").map(a => (
+                    <option key={a.name} value={a.name}>{a.name} (AI)</option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+
+            {/* Status */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-[--color-text-primary]">
+                Status
+              </label>
+              <select
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value as TaskStatus })}
+                className="w-full px-4 py-3 bg-[--color-surface] border border-[--color-border] rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+              >
+                {statusOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Priority */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-[--color-text-primary]">
+                Priority
+              </label>
+              <select
+                value={formData.priority}
+                onChange={(e) => setFormData({ ...formData, priority: e.target.value as TaskPriority })}
+                className="w-full px-4 py-3 bg-[--color-surface] border border-[--color-border] rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+              >
+                {priorityOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Assignee Type Indicator */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-[--color-text-primary]">
+                Assignee Type
+              </label>
+              <div className="px-4 py-3 bg-[--color-surface] border border-[--color-border] rounded-lg flex items-center gap-2">
+                {formData.assigneeType === "agent" ? (
+                  <>
+                    <span className="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
+                    <span className="text-sm font-medium text-primary">AI Agent</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-orange-500 text-[20px]">person</span>
+                    <span className="text-sm font-medium text-orange-500">Human</span>
+                  </>
+                )}
               </div>
             </div>
-            <div className="flex justify-end gap-3">
-              <button onClick={onClose} className="px-4 py-2 text-sm font-bold text-slate-600 dark:text-[--color-text-secondary] hover:bg-[--color-surface] dark:hover:bg-slate-800 rounded-lg transition-colors">
-                Close Task
+          </div>
+        </form>
+
+        {/* Footer */}
+        <footer className="px-6 py-4 border-t border-[--color-border] border-[--color-border] bg-[--color-card] dark:bg-card-dark shrink-0 flex justify-between items-center">
+          <div>
+            {task && onDelete && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="px-4 py-2 text-sm font-bold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors"
+              >
+                Delete Task
               </button>
-              <button className="px-6 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
-                Comment
-              </button>
-            </div>
+            )}
+          </div>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-bold text-slate-600 dark:text-[--color-text-secondary] hover:bg-[--color-surface] dark:hover:bg-slate-800 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSubmit}
+              className="px-6 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+            >
+              {task ? "Save Changes" : "Create Task"}
+            </button>
           </div>
         </footer>
       </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -16,8 +17,8 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "162 Limited",
-  description: "AI Consultancy for MK",
+  title: "162 Playbook",
+  description: "Open Source AI Infrastructure",
 };
 
 export default function RootLayout({
@@ -37,10 +38,10 @@ export default function RootLayout({
         className={cn(
           dmSans.variable,
           fraunces.variable,
-          "antialiased bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-hidden"
+          "antialiased bg-[--color-background] text-[--color-text-primary] min-h-screen flex flex-col overflow-hidden"
         )}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
