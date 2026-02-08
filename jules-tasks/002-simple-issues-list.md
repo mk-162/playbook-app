@@ -6,6 +6,14 @@ Replace dummy task cards with a real, simple list of GitHub Issues. No fancy car
 ## Issue Reference
 https://github.com/mk-162/162-playbook/issues/48
 
+## ⚠️ Check for Existing Run First
+Before starting, check if there's an active run folder:
+```
+https://github.com/mk-162/162-Playbook/tree/main/runs/issue-48
+```
+If it exists, read `tasks.md` and continue from the first unchecked `[ ]` item.
+Update checkboxes as you complete tasks.
+
 ## What to Build
 
 ### 1. Add `getIssues()` to `src/lib/github.ts`
