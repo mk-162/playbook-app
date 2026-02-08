@@ -35,10 +35,10 @@ export default function Dashboard() {
         <div className="dashboard-header px-8 pt-8 pb-4 flex justify-between items-end">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Workspace Overview</h1>
-            <p className="text-slate-500 mt-1">Welcome back. 12 updates since your last session.</p>
+            <p className="text-[--color-text-muted] mt-1">Welcome back. 12 updates since your last session.</p>
           </div>
           <div className="flex gap-3">
-            <button className="px-4 py-2 bg-slate-100 dark:bg-surface-dark text-sm font-medium rounded-lg border border-slate-200 dark:border-border-dark hover:bg-slate-200 dark:hover:bg-border-dark transition-colors">
+            <button className="px-4 py-2 bg-[--color-surface] bg-[--color-card] text-sm font-medium rounded-lg border border-[--color-border] border-[--color-border] hover:bg-slate-200 hover:bg-[--color-surface-raised] transition-colors">
               Invite Agent
             </button>
             <button className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/10">
@@ -53,62 +53,62 @@ export default function Dashboard() {
             {/* Left Column: Recent Updates (60%) */}
             <div className="col-span-12 lg:col-span-7 flex flex-col gap-6">
               <div>
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-[--color-text-secondary] mb-4 flex items-center gap-2">
                   <span className="material-symbols-outlined text-[18px]">history</span>
                   Recent Updates
                 </h2>
                 <div className="space-y-3">
                   {/* Update Card 1 */}
-                  <div className="dashboard-card p-4 rounded-xl border border-slate-200 dark:border-border-dark bg-white dark:bg-surface-dark hover:border-primary/50 transition-all group cursor-pointer">
+                  <div className="dashboard-card p-4 rounded-xl border border-[--color-border] border-[--color-border] bg-[--color-card] bg-[--color-card] hover:border-primary/50 transition-all group cursor-pointer">
                     <div className="flex justify-between items-start">
                       <div className="flex gap-4">
-                        <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-background-dark flex items-center justify-center">
-                          <span className="material-symbols-outlined text-slate-400">description</span>
+                        <div className="w-12 h-12 rounded-lg bg-[--color-surface] bg-[--color-surface] flex items-center justify-center">
+                          <span className="material-symbols-outlined text-[--color-text-secondary]">description</span>
                         </div>
                         <div>
                           <h3 className="font-medium group-hover:text-primary transition-colors">Q4 Marketing Strategy</h3>
-                          <p className="text-xs text-slate-500 mt-1">Edited by <span className="text-slate-300">Sarah Jenkins</span> • 2 hours ago</p>
+                          <p className="text-xs text-[--color-text-muted] mt-1">Edited by <span className="text-[--color-text-primary]">Sarah Jenkins</span> • 2 hours ago</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="px-2 py-0.5 text-[10px] rounded bg-blue-500/10 text-blue-500 font-bold uppercase tracking-tighter">Draft</span>
-                        <span className="material-symbols-outlined text-slate-600 text-[18px]">more_horiz</span>
+                        <span className="material-symbols-outlined text-[--color-text-muted] text-[18px]">more_horiz</span>
                       </div>
                     </div>
                   </div>
                    {/* Update Card 2 */}
-                  <div className="dashboard-card p-4 rounded-xl border border-slate-200 dark:border-border-dark bg-white dark:bg-surface-dark hover:border-primary/50 transition-all group cursor-pointer">
+                  <div className="dashboard-card p-4 rounded-xl border border-[--color-border] border-[--color-border] bg-[--color-card] bg-[--color-card] hover:border-primary/50 transition-all group cursor-pointer">
                     <div className="flex justify-between items-start">
                       <div className="flex gap-4">
-                        <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-background-dark flex items-center justify-center">
-                          <span className="material-symbols-outlined text-slate-400">api</span>
+                        <div className="w-12 h-12 rounded-lg bg-[--color-surface] bg-[--color-surface] flex items-center justify-center">
+                          <span className="material-symbols-outlined text-[--color-text-secondary]">api</span>
                         </div>
                         <div>
                           <h3 className="font-medium group-hover:text-primary transition-colors">API Integration Guide</h3>
-                          <p className="text-xs text-slate-500 mt-1">Generated by <span className="text-primary/80">AI Agent Beta</span> • Yesterday</p>
+                          <p className="text-xs text-[--color-text-muted] mt-1">Generated by <span className="text-primary/80">AI Agent Beta</span> • Yesterday</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="px-2 py-0.5 text-[10px] rounded bg-green-500/10 text-green-500 font-bold uppercase tracking-tighter">Published</span>
-                        <span className="material-symbols-outlined text-slate-600 text-[18px]">more_horiz</span>
+                        <span className="material-symbols-outlined text-[--color-text-muted] text-[18px]">more_horiz</span>
                       </div>
                     </div>
                   </div>
                    {/* Update Card 3 */}
-                  <div className="dashboard-card p-4 rounded-xl border border-slate-200 dark:border-border-dark bg-white dark:bg-surface-dark hover:border-primary/50 transition-all group cursor-pointer">
+                  <div className="dashboard-card p-4 rounded-xl border border-[--color-border] border-[--color-border] bg-[--color-card] bg-[--color-card] hover:border-primary/50 transition-all group cursor-pointer">
                     <div className="flex justify-between items-start">
                        <div className="flex gap-4">
-                        <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-background-dark flex items-center justify-center">
-                          <span className="material-symbols-outlined text-slate-400">security</span>
+                        <div className="w-12 h-12 rounded-lg bg-[--color-surface] bg-[--color-surface] flex items-center justify-center">
+                          <span className="material-symbols-outlined text-[--color-text-secondary]">security</span>
                         </div>
                         <div>
                           <h3 className="font-medium group-hover:text-primary transition-colors">Compliance Protocol v2</h3>
-                          <p className="text-xs text-slate-500 mt-1">Verified by <span className="text-slate-300">System Admin</span> • 2 days ago</p>
+                          <p className="text-xs text-[--color-text-muted] mt-1">Verified by <span className="text-[--color-text-primary]">System Admin</span> • 2 days ago</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 text-[10px] rounded bg-slate-500/10 text-slate-500 font-bold uppercase tracking-tighter">Archived</span>
-                        <span className="material-symbols-outlined text-slate-600 text-[18px]">more_horiz</span>
+                        <span className="px-2 py-0.5 text-[10px] rounded bg-slate-500/10 text-[--color-text-muted] font-bold uppercase tracking-tighter">Archived</span>
+                        <span className="material-symbols-outlined text-[--color-text-muted] text-[18px]">more_horiz</span>
                       </div>
                     </div>
                   </div>
@@ -116,13 +116,13 @@ export default function Dashboard() {
               </div>
                {/* Secondary Widget Area */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="dashboard-card p-4 rounded-xl border border-dashed border-slate-300 dark:border-border-dark flex flex-col items-center justify-center text-center py-8 hover:bg-slate-50 dark:hover:bg-surface-dark/50 transition-colors cursor-pointer">
-                  <span className="material-symbols-outlined text-slate-500 mb-2">add_circle</span>
-                  <p className="text-xs font-medium text-slate-400">Pin new document</p>
+                <div className="dashboard-card p-4 rounded-xl border border-dashed border-slate-300 border-[--color-border] flex flex-col items-center justify-center text-center py-8 hover:bg-[--color-surface] hover:bg-[--color-surface-raised]/50 transition-colors cursor-pointer">
+                  <span className="material-symbols-outlined text-[--color-text-muted] mb-2">add_circle</span>
+                  <p className="text-xs font-medium text-[--color-text-secondary]">Pin new document</p>
                 </div>
-                <div className="dashboard-card p-4 rounded-xl border border-dashed border-slate-300 dark:border-border-dark flex flex-col items-center justify-center text-center py-8 hover:bg-slate-50 dark:hover:bg-surface-dark/50 transition-colors cursor-pointer">
-                  <span className="material-symbols-outlined text-slate-500 mb-2">auto_awesome</span>
-                  <p className="text-xs font-medium text-slate-400">Request AI Summary</p>
+                <div className="dashboard-card p-4 rounded-xl border border-dashed border-slate-300 border-[--color-border] flex flex-col items-center justify-center text-center py-8 hover:bg-[--color-surface] hover:bg-[--color-surface-raised]/50 transition-colors cursor-pointer">
+                  <span className="material-symbols-outlined text-[--color-text-muted] mb-2">auto_awesome</span>
+                  <p className="text-xs font-medium text-[--color-text-secondary]">Request AI Summary</p>
                 </div>
               </div>
             </div>
@@ -130,17 +130,17 @@ export default function Dashboard() {
              {/* Right Column: Active Tasks (40%) */}
             <div className="col-span-12 lg:col-span-5 flex flex-col gap-6">
               <div>
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-4 flex items-center justify-between">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-[--color-text-secondary] mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-[18px]">checklist</span>
                     Active Tasks
                   </div>
                   <span className="text-[10px] bg-primary text-white px-2 py-0.5 rounded-full">48% Done</span>
                 </h2>
-                <div className="dashboard-card bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-xl overflow-hidden">
-                  <div className="divide-y divide-slate-200 dark:divide-border-dark">
+                <div className="dashboard-card bg-[--color-card] bg-[--color-card] border border-[--color-border] border-[--color-border] rounded-xl overflow-hidden">
+                  <div className="divide-y divide-[--color-border-muted] divide-[--color-border-muted]">
                     {/* Task Item 1 */}
-                    <div className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-background-dark/50 transition-colors cursor-pointer">
+                    <div className="p-4 flex items-center justify-between hover:bg-[--color-surface] hover:bg-[--color-surface] transition-colors cursor-pointer">
                       <div className="flex items-center gap-3">
                         <div className="w-5 h-5 rounded border-2 border-primary/40 flex items-center justify-center group">
                           <div className="w-2 h-2 bg-primary rounded-sm opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -149,39 +149,39 @@ export default function Dashboard() {
                       </div>
                       <div className="flex items-center gap-4">
                         <span className="px-2 py-1 text-[9px] rounded-full bg-primary/20 text-primary font-bold border border-primary/30">IN PROGRESS</span>
-                        <div className="w-6 h-6 rounded-full bg-cover bg-center border border-slate-200 dark:border-border-dark" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFCi2lwcuzbxIqPYPWwPX2dWDew6FcuYsxd9JKLu2bTJ8W_PUFfwEc0eLK82mBW3wSwJTFQ4LVLx3Q8EBSMgOV_3UtU_lSf9iraPxE144lDUdVrPPATUiHXFphj2EYey6gEt-2jA-eTHcQ4kpmsEieg7mMX8w3NIJY9YHjdZiFMoIiLnVVMavQnGV2im9MmZWPZjaF3uIcWbD1DyKwkL02inpbrdZwE4pM-rcF1ZJJZeVolvHl22Bc2WyTsMlhV9m9Zd0ZdWo8NYo')"}}></div>
+                        <div className="w-6 h-6 rounded-full bg-cover bg-center border border-[--color-border] border-[--color-border]" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFCi2lwcuzbxIqPYPWwPX2dWDew6FcuYsxd9JKLu2bTJ8W_PUFfwEc0eLK82mBW3wSwJTFQ4LVLx3Q8EBSMgOV_3UtU_lSf9iraPxE144lDUdVrPPATUiHXFphj2EYey6gEt-2jA-eTHcQ4kpmsEieg7mMX8w3NIJY9YHjdZiFMoIiLnVVMavQnGV2im9MmZWPZjaF3uIcWbD1DyKwkL02inpbrdZwE4pM-rcF1ZJJZeVolvHl22Bc2WyTsMlhV9m9Zd0ZdWo8NYo')"}}></div>
                       </div>
                     </div>
                      {/* Task Item 2 */}
-                    <div className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-background-dark/50 transition-colors cursor-pointer">
+                    <div className="p-4 flex items-center justify-between hover:bg-[--color-surface] hover:bg-[--color-surface] transition-colors cursor-pointer">
                       <div className="flex items-center gap-3">
                         <div className="w-5 h-5 rounded border-2 border-amber-500/40 flex items-center justify-center">
                           <span className="material-symbols-outlined text-[14px] text-amber-500">priority_high</span>
                         </div>
-                        <span className="text-sm font-medium text-slate-300">Approve Newsletter Draft</span>
+                        <span className="text-sm font-medium text-[--color-text-primary]">Approve Newsletter Draft</span>
                       </div>
                       <div className="flex items-center gap-4">
                         <span className="px-2 py-1 text-[9px] rounded-full bg-amber-500/20 text-amber-500 font-bold border border-amber-500/30">REVIEW</span>
-                        <div className="w-6 h-6 rounded-full bg-cover bg-center border border-slate-200 dark:border-border-dark" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4Aqgazs5a9KqFRY0iTEBdd3zr7fgjBMoGISJfFsCHebhmiXfwova1W1QWjEeyZwt6pvvjsCQ27KiotpjiiakVyjncOp589A6jAo5hQ10WbaAeDa01FoFAJ8MFxAUvDfVeNoMxV6IT6SOunZmMuaz1P1WkxElhaWN9Qp_LsxbPoyDi3FUAmKktFKDf_8undiNjc6lSOj3b9mZXCDKFfey6VBa7eI6D4vg7ZchCxKtBG0WkUTrrShPosfydJaFYOiagegw7-g95Nt4')"}}></div>
+                        <div className="w-6 h-6 rounded-full bg-cover bg-center border border-[--color-border] border-[--color-border]" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4Aqgazs5a9KqFRY0iTEBdd3zr7fgjBMoGISJfFsCHebhmiXfwova1W1QWjEeyZwt6pvvjsCQ27KiotpjiiakVyjncOp589A6jAo5hQ10WbaAeDa01FoFAJ8MFxAUvDfVeNoMxV6IT6SOunZmMuaz1P1WkxElhaWN9Qp_LsxbPoyDi3FUAmKktFKDf_8undiNjc6lSOj3b9mZXCDKFfey6VBa7eI6D4vg7ZchCxKtBG0WkUTrrShPosfydJaFYOiagegw7-g95Nt4')"}}></div>
                       </div>
                     </div>
                      {/* Task Item 3 */}
-                    <div className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-background-dark/50 transition-colors cursor-pointer">
+                    <div className="p-4 flex items-center justify-between hover:bg-[--color-surface] hover:bg-[--color-surface] transition-colors cursor-pointer">
                       <div className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded border-2 border-slate-200 dark:border-border-dark flex items-center justify-center"></div>
+                        <div className="w-5 h-5 rounded border-2 border-[--color-border] border-[--color-border] flex items-center justify-center"></div>
                         <span className="text-sm font-medium">Refactor Onboarding Flow</span>
                       </div>
                       <div className="flex items-center gap-4">
-                        <span className="px-2 py-1 text-[9px] rounded-full bg-slate-100 dark:bg-background-dark text-slate-500 font-bold border border-slate-200 dark:border-border-dark">TODO</span>
+                        <span className="px-2 py-1 text-[9px] rounded-full bg-[--color-surface] bg-[--color-surface] text-[--color-text-muted] font-bold border border-[--color-border] border-[--color-border]">TODO</span>
                         <div className="flex -space-x-2">
-                          <div className="w-6 h-6 rounded-full border border-slate-200 dark:border-border-dark bg-cover" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUWi43k8Gkv6flpX8nRUr70uT1vJJciqDGbbclMsyib0UP9v3Yp2ZQd3vZ36Vvk70WbPsVoAA9I8DwDLbeEeESZMquF6u98-8g7pD-OBmEZHbmYRwQFTLD0sp4T2SHSc66CWi5Y7PiEJP_RETHMuASfxrKS3-zGcdFdXLHcX1yNGljJEeZsYl0YW2HqikzS0yMhRh1hK-o0WhNN5WL724GkbrA5ocsnVVMslGrZC-zl14IhgJFpxyEWtovTIUiUxHaw5ZeDum8_yo')"}}></div>
-                          <div className="w-6 h-6 rounded-full border border-slate-200 dark:border-border-dark bg-cover" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAekkB42CD0OxOalUd1_7h5UPBXZIfEqyb_UgppXdHJcWWDa1hK_fWa8oWE5KibNp1XoXrROKfRRSKjr_YcmiqxLr41VsRcBryEIL1eCizAVN6h8qz0Wjf0mZSHPc0D7zcm5-b2u0wbokcYb6hT6DtZhmGd3JNQFlrs2FBTWwlAkgCuNAZ6MUPGdfBxa3FHwRRulGYGewbxeeixdOnfpcN2JwVNjoCKf3SZfxVwmM1XzL3g-q6flxtadJC2AJg2EMDkGSDzhCpgxko')"}}></div>
+                          <div className="w-6 h-6 rounded-full border border-[--color-border] border-[--color-border] bg-cover" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUWi43k8Gkv6flpX8nRUr70uT1vJJciqDGbbclMsyib0UP9v3Yp2ZQd3vZ36Vvk70WbPsVoAA9I8DwDLbeEeESZMquF6u98-8g7pD-OBmEZHbmYRwQFTLD0sp4T2SHSc66CWi5Y7PiEJP_RETHMuASfxrKS3-zGcdFdXLHcX1yNGljJEeZsYl0YW2HqikzS0yMhRh1hK-o0WhNN5WL724GkbrA5ocsnVVMslGrZC-zl14IhgJFpxyEWtovTIUiUxHaw5ZeDum8_yo')"}}></div>
+                          <div className="w-6 h-6 rounded-full border border-[--color-border] border-[--color-border] bg-cover" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAekkB42CD0OxOalUd1_7h5UPBXZIfEqyb_UgppXdHJcWWDa1hK_fWa8oWE5KibNp1XoXrROKfRRSKjr_YcmiqxLr41VsRcBryEIL1eCizAVN6h8qz0Wjf0mZSHPc0D7zcm5-b2u0wbokcYb6hT6DtZhmGd3JNQFlrs2FBTWwlAkgCuNAZ6MUPGdfBxa3FHwRRulGYGewbxeeixdOnfpcN2JwVNjoCKf3SZfxVwmM1XzL3g-q6flxtadJC2AJg2EMDkGSDzhCpgxko')"}}></div>
                         </div>
                       </div>
                     </div>
                   </div>
-                   <div className="bg-slate-50 dark:bg-background-dark/30 p-3 text-center">
-                    <button className="text-[11px] font-bold text-slate-500 hover:text-slate-300 uppercase tracking-widest">View All Tasks</button>
+                   <div className="bg-[--color-surface] bg-[--color-surface]/30 p-3 text-center">
+                    <button className="text-[11px] font-bold text-[--color-text-muted] hover:text-[--color-text-primary] uppercase tracking-widest">View All Tasks</button>
                   </div>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function Dashboard() {
                 <div className="flex justify-between items-end">
                   <div>
                     <p className="text-2xl font-bold">98.2%</p>
-                    <p className="text-[10px] text-slate-500">Agent sync accuracy</p>
+                    <p className="text-[10px] text-[--color-text-muted]">Agent sync accuracy</p>
                   </div>
                   <div className="h-10 w-24 flex items-end gap-1">
                     <div className="flex-1 bg-primary/20 h-[40%] rounded-t-sm"></div>
@@ -207,7 +207,7 @@ export default function Dashboard() {
         </div>
 
         {/* Agent Activity Ticker (Bottom Fixed -> Sticky) */}
-        <footer className="h-12 border-t border-slate-200 dark:border-border-dark bg-white dark:bg-background-dark flex items-center px-6 overflow-hidden whitespace-nowrap z-10 sticky bottom-0">
+        <footer className="h-12 border-t border-[--color-border] border-[--color-border] bg-[--color-card] bg-[--color-surface] flex items-center px-6 overflow-hidden whitespace-nowrap z-10 sticky bottom-0">
           <div className="flex items-center gap-2 mr-6 text-primary shrink-0">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -215,23 +215,23 @@ export default function Dashboard() {
             </span>
             <span className="text-[10px] font-bold uppercase tracking-widest">Live Activity</span>
           </div>
-          <div className="flex items-center gap-12 text-xs font-medium text-slate-500 overflow-hidden">
+          <div className="flex items-center gap-12 text-xs font-medium text-[--color-text-muted] overflow-hidden">
                {/* Ticker Content */}
              <div className="flex gap-12">
                 <div className="flex items-center gap-2">
-                  <span className="text-slate-300 font-semibold uppercase text-[9px] bg-slate-800 px-1.5 py-0.5 rounded">Alpha</span>
+                  <span className="text-[--color-text-primary] font-semibold uppercase text-[9px] bg-[--color-surface-raised] px-1.5 py-0.5 rounded">Alpha</span>
                   <span>Agent Alpha optimized 14 knowledge nodes</span>
                   <span className="text-[10px] opacity-50">2m ago</span>
                 </div>
-                <div className="w-1 h-1 rounded-full bg-slate-700"></div>
+                <div className="w-1 h-1 rounded-full bg-[--color-border]"></div>
                 <div className="flex items-center gap-2">
-                  <span className="text-slate-300 font-semibold uppercase text-[9px] bg-slate-800 px-1.5 py-0.5 rounded">Sigma</span>
+                  <span className="text-[--color-text-primary] font-semibold uppercase text-[9px] bg-[--color-surface-raised] px-1.5 py-0.5 rounded">Sigma</span>
                   <span>Agent Sigma summarized &quot;Weekly Sync&quot; meeting notes</span>
                   <span className="text-[10px] opacity-50">14m ago</span>
                 </div>
-                <div className="w-1 h-1 rounded-full bg-slate-700"></div>
+                <div className="w-1 h-1 rounded-full bg-[--color-border]"></div>
                 <div className="flex items-center gap-2">
-                  <span className="text-slate-300 font-semibold uppercase text-[9px] bg-slate-800 px-1.5 py-0.5 rounded">SYS</span>
+                  <span className="text-[--color-text-primary] font-semibold uppercase text-[9px] bg-[--color-surface-raised] px-1.5 py-0.5 rounded">SYS</span>
                   <span>Vector database indexing complete (4.2 GB)</span>
                   <span className="text-[10px] opacity-50">32m ago</span>
                 </div>

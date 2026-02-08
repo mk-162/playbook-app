@@ -1,62 +1,144 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  --color-primary: #2b6cee;
-  --color-background-light: #f6f6f8;
-  --color-background-dark: #0a0a0a;
-  --color-surface-dark: #161616;
-  --color-border-dark: #262626;
-  --color-card-dark: #1a2233;
-  --color-border-muted: #324467;
-
+  /* 162 Design System - Dark Premium */
+  --color-background: #0A0A0B;
+  --color-foreground: #FAFAFA;
+  
+  /* Surfaces - better contrast hierarchy */
+  --color-surface: #18181B;
+  --color-surface-raised: #27272A;
+  --color-card: #1C1C1F;
+  
+  /* Primary accent - warm orange */
+  --color-primary: #F97316;
+  --color-primary-hover: #EA580C;
+  --color-primary-muted: rgba(249, 115, 22, 0.15);
+  
+  /* Text hierarchy */
+  --color-text-primary: #FAFAFA;
+  --color-text-secondary: #A1A1AA;
+  --color-text-muted: #71717A;
+  
+  /* Borders */
+  --color-border: #3F3F46;
+  --color-border-muted: #27272A;
+  
+  /* Status colors */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+  
+  /* Fonts */
   --font-dm-sans: var(--font-dm-sans);
-  --font-fraunces: var(--font-fraunces);
-  --font-serif: var(--font-fraunces);
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
 }
 
-/* Default (Light) */
 :root {
-  --background: #f6f6f8;
-  --foreground: #171717;
-}
-
-/* Dark Mode (Class or Media) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #0A0A0B;
+  --foreground: #FAFAFA;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-dm-sans), sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar from Design */
+/* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-surface);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #262626;
-  border-radius: 10px;
+  background: var(--color-border);
+  border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
 }
 
 /* Material Symbols settings */
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   font-size: 24px;
+}
+
+/* Utility classes */
+.gradient-text {
+  background: linear-gradient(135deg, #F97316, #FB923C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #F97316, #EA580C);
+}
+
+/* Override dark text issues */
+.text-slate-300 {
+  color: #D4D4D8 !important;
+}
+
+.text-slate-400 {
+  color: #A1A1AA !important;
+}
+
+.text-slate-500 {
+  color: #71717A !important;
+}
+
+.text-slate-600 {
+  color: #52525B !important;
+}
+
+/* Fix dark backgrounds */
+.bg-slate-100,
+.dark .bg-slate-100 {
+  background-color: var(--color-surface) !important;
+}
+
+.bg-slate-50,
+.dark .bg-slate-50 {
+  background-color: var(--color-surface) !important;
+}
+
+.bg-slate-800 {
+  background-color: var(--color-surface-raised) !important;
+}
+
+.bg-white,
+.dark .bg-white {
+  background-color: var(--color-card) !important;
+}
+
+/* Border fixes */
+.border-slate-200,
+.dark .border-slate-200 {
+  border-color: var(--color-border) !important;
+}
+
+.border-slate-300 {
+  border-color: var(--color-border) !important;
+}
+
+.divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--color-border-muted) !important;
+}
+
+/* Hover states */
+.hover\:bg-slate-50:hover,
+.dark .hover\:bg-slate-50:hover,
+.hover\:bg-slate-200:hover,
+.dark .hover\:bg-slate-200:hover {
+  background-color: var(--color-surface-raised) !important;
 }
