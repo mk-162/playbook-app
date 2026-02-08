@@ -58,7 +58,7 @@ export default function Header() {
           {showDropdown && (
             <>
               <div 
-                className="fixed inset-0 z-10" 
+                className="fixed inset-0 z-10 bg-black/20" 
                 onClick={() => setShowDropdown(false)}
               />
               <div className="absolute right-0 top-12 w-48 bg-[--color-card] border border-[--color-border] rounded-xl shadow-xl z-20 overflow-hidden">
