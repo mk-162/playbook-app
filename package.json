@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.34.3",
+    "@octokit/rest": "^22.0.1",
     "clsx": "^2.1.1",
     "gsap": "^3.14.2",
     "lenis": "^1.3.17",
