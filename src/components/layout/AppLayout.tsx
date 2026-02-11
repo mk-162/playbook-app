@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import { ChatPanel } from "@/components/chat";
 import Lenis from "lenis";
 
 export default function AppLayout({ children, disableScroll = false }: { children: React.ReactNode, disableScroll?: boolean }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     if (disableScroll || !scrollContainerRef.current) return;
@@ -38,13 +40,22 @@ export default function AppLayout({ children, disableScroll = false }: { childre
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
-        <Header />
-        <main
-          ref={scrollContainerRef}
-          className={mainClass}
-        >
-          {children}
-        </main>
+        <Header 
+          isChatOpen={isChatOpen} 
+          onChatToggle={() => setIsChatOpen(!isChatOpen)} 
+        />
+        <div className="flex flex-1 overflow-hidden">
+          <main
+            ref={scrollContainerRef}
+            className={mainClass}
+          >
+            {children}
+          </main>
+          <ChatPanel 
+            isOpen={isChatOpen} 
+            onClose={() => setIsChatOpen(false)} 
+          />
+        </div>
       </div>
     </div>
   );

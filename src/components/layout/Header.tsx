@@ -4,7 +4,12 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 
-export default function Header() {
+interface HeaderProps {
+  isChatOpen?: boolean;
+  onChatToggle?: () => void;
+}
+
+export default function Header({ isChatOpen, onChatToggle }: HeaderProps) {
   const { data: session } = useSession();
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -24,6 +29,21 @@ export default function Header() {
         <button className="p-2 hover:bg-[--color-surface-raised] rounded-lg text-[--color-text-muted] hover:text-[--color-text-secondary] transition-colors">
           <span className="material-symbols-outlined text-[20px]">search</span>
         </button>
+        
+        {/* Chat toggle button */}
+        {onChatToggle && (
+          <button 
+            onClick={onChatToggle}
+            className={`p-2 rounded-lg transition-colors ${
+              isChatOpen 
+                ? 'bg-[--color-primary] text-white' 
+                : 'hover:bg-[--color-surface-raised] text-[--color-text-muted] hover:text-[--color-text-secondary]'
+            }`}
+            title={isChatOpen ? 'Close chat' : 'Open chat'}
+          >
+            <span className="material-symbols-outlined text-[20px]">chat</span>
+          </button>
+        )}
         
         <div className="h-8 w-[1px] bg-[--color-border-muted] mx-1"></div>
         
