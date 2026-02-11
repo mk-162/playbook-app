@@ -1,38 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 162 Playbook Dashboard
 
-## Getting Started
+A dark-themed Next.js dashboard for managing AI-powered business operations. Built for consultants and agencies who run on playbooks.
 
-First, run the development server:
+## Features
+
+- **Issue Tracking** — View and manage GitHub issues from your playbook repo
+- **Chat Panel** — Collapsible right sidebar with G-Bot assistant (connects to Clawdbot gateway)
+- **Playbook Browser** — Browse and view playbook files
+- **Task Timeline** — Visual timeline of tasks and progress
+- **Dark Theme** — Premium dark design with orange accents
+
+## Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your GitHub credentials
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# GitHub OAuth (for authentication)
+GITHUB_ID=your_github_oauth_app_id
+GITHUB_SECRET=your_github_oauth_app_secret
 
-## Learn More
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_random_secret_here
 
-To learn more about Next.js, take a look at the following resources:
+# Clawdbot Gateway (for chat)
+NEXT_PUBLIC_GATEWAY_URL=ws://localhost:19000
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Chat Integration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The chat panel connects to a Clawdbot gateway via WebSocket. Make sure the gateway is running:
 
-## Deploy on Vercel
+```bash
+clawdbot gateway
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Then click the chat icon in the header to open the panel.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Trigger deploy
+## Tech Stack
 
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS 4
+- NextAuth.js (GitHub OAuth)
+- GSAP (animations)
+- Lenis (smooth scroll)
+
+## Project Structure
+
+```
+src/
+├── app/                 # Next.js pages
+├── components/
+│   ├── chat/           # Chat panel components
+│   ├── features/       # Feature components
+│   ├── layout/         # Layout components
+│   └── providers/      # Context providers
+├── hooks/              # Custom React hooks
+└── lib/                # Utilities
+```
+
+## License
+
+MIT
+
+---
+
+Built by [162](https://162.com) — AI-Powered Business Operations
